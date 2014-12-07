@@ -9,6 +9,11 @@
 
 # install utils
 
+template "#{node[:user][:home]}/.vimrc" do
+  source "vimrc.erb"
+  action :create_if_missing
+end
+
 # install python3.x
 
 %w|build-essential python3-dev python3-setuptools 
@@ -29,10 +34,10 @@ end
 
 # install pip
 execute "install pip" do
-  command "curl #{node['pip']['get-pip-url']} | sudo python3"
+  command "curl #{node[:pip][:get_pip_url]} | sudo python3"
 end
 
 # install scikit-learn 0.15.0
 execute "install scikit-learn" do
-  command "sudo pip install \"scikit-learn==#{node['scikit-learn']['version']}\""
+  command "sudo pip install \"scikit-learn==#{node[:scikit_learn][:version]}\""
 end
