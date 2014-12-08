@@ -17,7 +17,7 @@ end
 # install python3.x
 
 %w|build-essential python3-dev python3-setuptools 
-python3-numpy python3-scipy libatlas-dev libatlas3gf-base|.each do |pkg|
+python3-numpy python3-scipy libatlas-dev libatlas3gf-base python3-matplotlib|.each do |pkg|
   apt_package pkg do
     action :install
     options "-f --force-yes"
@@ -40,4 +40,19 @@ end
 # install scikit-learn 0.15.0
 execute "install scikit-learn" do
   command "sudo pip install \"scikit-learn==#{node[:scikit_learn][:version]}\""
+end
+
+# install ipython and dependencies
+execute "install ipython" do
+  command "sudo pip install ipython"
+end
+
+%w|pyzmq tornado Jinja2 pytz|.each do |pkg|
+  execute "install ipython dependencies" do
+    command "sudo pip install #{pkg}"
+  end
+end
+
+execute "install MathJax" do
+  command "ipython -c \"from IPython.external.mathjax import install_mathjax; install_mathjax()\""
 end
